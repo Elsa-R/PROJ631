@@ -10,6 +10,7 @@ class Codage:
     
     def __init__(self,text):
         self.text=text
+        self.longueurTexte=0
         self.elem=self.alphaFreq()
         self.listeArbre=[]
         
@@ -20,6 +21,7 @@ class Codage:
         liste=[]
         for ligne in fichier:
             for lettre in ligne:
+                self.longueurTexte=self.longueurTexte+1
                 if lettre not in self.listeAlpha:
                     self.listeAlpha.append(lettre)
                     freq=self.frequence(lettre)
@@ -105,9 +107,12 @@ class Codage:
                 code=code+self.listeArbre[0].codeLettre(lettre)
         return code
     
-    def tauxCompression(self)
+    def tauxCompression(self):
+        lCode=len(self.creationCode())
+        longTexte=8*self.longueurTexte
+        return (1-(lCode/longTexte))*100
         
-        
+
         
         
         
@@ -115,7 +120,9 @@ class Codage:
         ''' TEST DU CODE'''
 #==============================================================================
         
-code=Codage("textesimple.txt")
+code=Codage("alice.txt")
 result=code.creationCode()
-print(result)
+#print(result)
+taux=code.tauxCompression()
+print(taux)
 
