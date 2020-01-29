@@ -8,15 +8,16 @@ from Arbre import Arbre
 
 class Codage:
     
+    # Constructeur
     def __init__(self,text):
         self.text=text
         self.longueurTexte=0
         self.elem=self.alphaFreq()
         self.listeArbre=[]
         
-    #retourne la liste triee composee de tuple (frequence,lettre)
+    # Retourne la liste triee composee de tuple (frequence,lettre)
     def alphaFreq(self):
-        fichier=open(self.text,"r")
+        fichier=open(self.text+".txt","r")
         self.listeAlpha=[]
         liste=[]
         for ligne in fichier:
@@ -29,11 +30,12 @@ class Codage:
         fichier.close
         # On retourne la liste triee 
         return sorted(liste)
-        
+    
+    
     # Retourne le nbr de fois que la lettre passée en paramètre apparait
     # dans le texte
     def frequence(self,lettre):
-        fichier=open(self.text,"r")
+        fichier=open(self.text+".txt","r")
         cpt=0
         for ligne in fichier:
             for l in ligne:
@@ -45,29 +47,37 @@ class Codage:
 #==============================================================================
         ''' CREATION DE L'ARBRE'''
 #==============================================================================
-        
+    
+    # Retourne l'index de l'arbre passe en parametre quand celui-ci se trouve 
+    # dans la listeArbre triee
     def indexNouvelArbre(self,arbre):
         listeVal=[]
+        # On recupere le tuple (freq,lettre) de l'arbre passe en parametre
         nouvelArbre=(arbre.valeur,arbre.label)
+        # On recupere le tuple (freq,lettre) des arbres de listeArbre
         for arbre in self.listeArbre:
             listeVal.append((arbre.valeur,arbre.label))
+        # On ajoute le tuple de l'arbre passe en parametre dans la liste
         listeVal.append(nouvelArbre)
+        #On trie la liste
         l=sorted(listeVal)
-        index=l.index(nouvelArbre)
-        return index
-        
-        
+        #On retourne l'index de l'arbre passe en parametre
+        return l.index(nouvelArbre)
+          
+      
     # Cree un arbre composé d'un seul noeud sans enfant pour chaque lettre 
     # qui compose le texte
     def creationFeuille(self):
         for (u,v) in self.elem:
             self.listeArbre.append(Arbre(v,u))
         
+        
     # Cree l'arbre complet pour le codage
     def arbre(self):
         self.creationFeuille()
         while len(self.listeArbre)!=1:
             self.creationArbre()
+        
         
     #Cree un arbre dont la racine a les deux plus petit element de listeArbre 
     #(qui sont ensuite enleves de listeArbre) et l'ajoute a listeArbre à la bonne place
@@ -90,39 +100,70 @@ class Codage:
         # On ajoute arbre au bon endroit dans listeArbre
         self.listeArbre[index:index]=[arbre]
         
+        
     # Affiche l'arbre
     def drawArbre(self):
-        self.listeArbre[0].parcoursProfondeur()
+        self.listeArbre[0].drawArbre()
             
 #==============================================================================
         ''' CREATION DU CODAGE'''
 #==============================================================================          
-
+        
+    # Retourne le code du texte passe en parametre dans le constructeur
+    # Retourne une chaine de caractere
     def creationCode(self):
         code=""
         self.arbre()
-        fichier=open(self.text,"r")
+        dico=self.dicoCode()
+        fichier=open(self.text+".txt","r")
         for ligne in fichier:
             for lettre in ligne:
-                code=code+self.listeArbre[0].codeLettre(lettre)
-        return code
+                code=code+dico.get(lettre)
+                #code=code+self.listeArbre[0].codeLettre(lettre)
+        fichier.close
+        self.code=code
+        self.creationFichierBinaire()
     
+    def dicoCode(self):
+        dico={}
+        for alpha in self.listeAlpha:
+            #print(alpha,' = ',self.listeArbre[0].codeLettre(alpha))
+            dico[alpha]=self.listeArbre[0].codeLettre(alpha)
+        return dico
+    
+    # Retourne le taux de compression
     def tauxCompression(self):
-        lCode=len(self.creationCode())
+        self.creationCode()
+        lCode=len(self.code)
         longTexte=8*self.longueurTexte
         return (1-(lCode/longTexte))*100
-        
 
-        
-        
-        
 #==============================================================================
-        ''' TEST DU CODE'''
-#==============================================================================
-        
-code=Codage("alice.txt")
-result=code.creationCode()
-#print(result)
-taux=code.tauxCompression()
-print(taux)
+        ''' CREATION DES FICHIERS'''
+#============================================================================== 
 
+    def creationFichierAlphabet(self):
+        self.fichierAlphabet=open(self.text+"_freq.txt","w")
+        self.fichierAlphabet.write(str(len(self.elem))+"\n")
+        for (u,v) in self.elem:
+            self.fichierAlphabet.write(v+" : "+str(u)+"\n")    
+        self.fichierAlphabet.close()
+        
+        
+    def creationFichierBinaire(self):
+        print('coucou')
+        self.fichierAlphabet=open(self.text+"_bin.txt","w")
+        a=""
+        for num in self.code:
+            a=a+num
+            if len(a)==8:
+                self.fichierAlphabet.write(a+"\n")
+                a=""
+        while len(a)!=8:
+            a=a+"0"
+        print(a)
+        self.fichierAlphabet.write(a)
+        self.fichierAlphabet.close()
+#==============================================================================
+        ''' FIN DU CODE '''
+#============================================================================== 

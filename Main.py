@@ -6,7 +6,10 @@ Created on Sat Jan 25 16:21:32 2020
 """
 
 from Codage import Codage
-from Arbre import Arbre
 class Main:
-    
+    code=Codage("alice")
+    taux=code.tauxCompression()
+    code.creationFichierAlphabet()
+    #code.drawArbre()
+    print("Taux de compression : ",taux)
     
