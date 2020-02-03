@@ -150,20 +150,37 @@ class Codage:
         self.fichierAlphabet.close()
         
         
-    def creationFichierBinaire(self):
+    def creationFichierOctet(self):
         print('coucou')
-        self.fichierAlphabet=open(self.text+"_bin.txt","w")
+        self.fichierOctet=open(self.text+"_oct.txt","w")
         a=""
         for num in self.code:
             a=a+num
             if len(a)==8:
-                self.fichierAlphabet.write(a+"\n")
+                self.fichierOctet.write(a+"\n")
                 a=""
         while len(a)!=8:
             a=a+"0"
         print(a)
-        self.fichierAlphabet.write(a)
-        self.fichierAlphabet.close()
+        self.fichierOctet.write(a)
+        self.fichierOctet.close()
+        
+    def creationFichierBinaire(self):
+        self.creationFichierOctet()
+        print('coucou')
+        self.fichierBin=open(self.text+"_bin.txt","wb")
+        a=""
+        fichierOctet=open(self.text+"_oct.txt","r")
+        for octet in fichierOctet:
+            a=a+octet
+            if len(a)==8:
+                self.fichierBin.write(a+"\n")
+                a=""
+        while len(a)!=8:
+            a=a+"0"
+        print(a)
+        self.fichierBin.write(a)
+        self.fichierBin.close()
 #==============================================================================
         ''' FIN DU CODE '''
 #============================================================================== 
