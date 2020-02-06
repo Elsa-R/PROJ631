@@ -4,7 +4,7 @@ Created on Wed Jan 22 08:23:18 2020
 
 @author: ruellee
 """
-import struct
+import os
 from Arbre import Arbre
 
 class Codage:
@@ -162,7 +162,7 @@ class Codage:
             if len(a)==8:
                 self.fichierOctet.write(a+"\n")
                 a=""
-        while len(a)!=8:
+        while len(a)!=8 and len(a)!=0:
             a=a+"0"
         self.fichierOctet.write(a)
         self.fichierOctet.close()
@@ -186,6 +186,16 @@ class Codage:
                     #bytes(octet.encode('utf_8'))
             self.fichierOctet.close()
         self.fichierBin.close()
+        somme=0
+        cpt=0
+        dico=self.dicoCode()
+        for elem in self.listeAlpha:
+            somme=somme+len(dico[elem])
+            cpt=cpt+1
+        print("Nombre moyen de bits de stockage d’un caractère du texte compressé : ",somme/cpt)
+        
+        
+        
 #==============================================================================
         ''' FIN DU CODE '''
 #==============================================================================        

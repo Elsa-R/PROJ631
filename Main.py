@@ -10,5 +10,6 @@ class Main:
     code=Codage("alice")
     code.creationFichierAlphabet()
     taux=code.tauxCompression()
+    #print(code.listeArbre[0].codeLettre("p"))
     #code.drawArbre()
     print("Taux de compression : ",taux)
