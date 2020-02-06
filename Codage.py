@@ -192,10 +192,7 @@ class Codage:
         for elem in self.listeAlpha:
             somme=somme+len(dico[elem])
             cpt=cpt+1
-        print("Nombre moyen de bits de stockage d’un caractère du texte compressé : ",somme/cpt)
-        
-        
-        
+        print("Nombre moyen de bits de stockage d’un caractère du texte compressé : ",somme/cpt)   
 #==============================================================================
         ''' FIN DU CODE '''
 #==============================================================================        
