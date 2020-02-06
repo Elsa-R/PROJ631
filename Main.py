@@ -8,8 +8,7 @@ Created on Sat Jan 25 16:21:32 2020
 from Codage import Codage
 class Main:
     code=Codage("alice")
-    taux=code.tauxCompression()
     code.creationFichierAlphabet()
+    taux=code.tauxCompression()
     #code.drawArbre()
     print("Taux de compression : ",taux)
-    

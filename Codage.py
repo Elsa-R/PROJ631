@@ -4,6 +4,7 @@ Created on Wed Jan 22 08:23:18 2020
 
 @author: ruellee
 """
+import struct
 from Arbre import Arbre
 
 class Codage:
@@ -141,17 +142,19 @@ class Codage:
 #==============================================================================
         ''' CREATION DES FICHIERS'''
 #============================================================================== 
-
+    
+    # Creation du fichier texte qui contient les lettres de l'alphabet et de leur frequence 
     def creationFichierAlphabet(self):
         self.fichierAlphabet=open(self.text+"_freq.txt","w")
+        # Nombre de lettre dans l'alphabet
         self.fichierAlphabet.write(str(len(self.elem))+"\n")
         for (u,v) in self.elem:
+            # Lettre et sa frequence 
             self.fichierAlphabet.write(v+" : "+str(u)+"\n")    
         self.fichierAlphabet.close()
         
-        
+    # Creation du fichier texte code
     def creationFichierOctet(self):
-        print('coucou')
         self.fichierOctet=open(self.text+"_oct.txt","w")
         a=""
         for num in self.code:
@@ -161,26 +164,28 @@ class Codage:
                 a=""
         while len(a)!=8:
             a=a+"0"
-        print(a)
         self.fichierOctet.write(a)
         self.fichierOctet.close()
         
+    # Creation du fichier bianire
     def creationFichierBinaire(self):
         self.creationFichierOctet()
-        print('coucou')
-        self.fichierBin=open(self.text+"_bin.txt","wb")
-        a=""
-        fichierOctet=open(self.text+"_oct.txt","r")
-        for octet in fichierOctet:
-            a=a+octet
-            if len(a)==8:
-                self.fichierBin.write(a+"\n")
-                a=""
-        while len(a)!=8:
-            a=a+"0"
-        print(a)
-        self.fichierBin.write(a)
+        with open(self.text+"_comp.bin","wb") as self.fichierBin:
+            with open(self.text+"_oct.txt","r") as self.fichierOctet:
+                for octet in self.fichierOctet:
+                    nombre=0
+                    cpt=0
+                    for i in octet:
+                        if i!="\n":
+                            cpt=cpt+1
+                            # On convertit le nombre binaire en nombre decimal
+                            nombre=nombre+(int(i)*2**(8-cpt))
+                    # On convertit le nombre decimal en octet 
+                    n=(nombre).to_bytes(1, byteorder='big')
+                    self.fichierBin.write(n)
+                    #bytes(octet.encode('utf_8'))
+            self.fichierOctet.close()
         self.fichierBin.close()
 #==============================================================================
         ''' FIN DU CODE '''
-#============================================================================== 
+#==============================================================================        
