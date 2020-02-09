@@ -4,7 +4,6 @@ Created on Wed Jan 22 08:23:18 2020
 
 @author: ruellee
 """
-import os
 from Arbre import Arbre
 
 class Codage:
