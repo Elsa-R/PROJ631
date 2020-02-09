@@ -6,7 +6,9 @@ Created on Sat Jan 25 16:21:32 2020
 """
 
 from Codage import Codage
-class Main:
+
+if __name__ == '__main__':
+    
     code=Codage("alice")
     code.creationFichierAlphabet()
     taux=code.tauxCompression()
