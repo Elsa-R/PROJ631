@@ -4,6 +4,7 @@ Created on Wed Jan 22 08:23:18 2020
 
 @author: ruellee
 """
+import os
 from Arbre import Arbre
 
 class Codage:
@@ -186,12 +187,10 @@ class Codage:
             self.fichierOctet.close()
         self.fichierBin.close()
         somme=0
-        cpt=0
         dico=self.dicoCode()
-        for elem in self.listeAlpha:
-            somme=somme+len(dico[elem])
-            cpt=cpt+1
-        print("Nombre moyen de bits de stockage d’un caractère du texte compressé : ",somme/cpt)   
+        for (freq,lettre) in self.elem:
+            somme=somme+(freq*(len(dico[lettre])))
+        print("Nombre moyen de bits de stockage d’un caractère du texte compressé : ",somme/self.longueurTexte)   
 #==============================================================================
         ''' FIN DU CODE '''
 #==============================================================================        
